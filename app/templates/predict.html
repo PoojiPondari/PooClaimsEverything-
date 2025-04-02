@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if not show_results %}
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-calculator"></i> Calculate Your Insurance Cost</h2>
+                <p class="mb-0">Enter your details below for an accurate prediction</p>
+            </div>
+            <div class="card-body">
+                <form method="POST" novalidate>
+                    {{ form.hidden_tag() }}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.age.label(class="form-label") }}
+                                <small class="text-muted d-block mb-2">Must be between 1 and 70 years</small>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    {{ form.age(class="form-control" + (" is-invalid" if form.age.errors else ""), 
+                                               placeholder="Enter age (1-70)",
+                                               min="1",
+                                               max="70",
+                                               type="number") }}
+                                </div>
+                                {% if form.age.errors %}
+                                    {% for error in form.age.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            <i class="fas fa-exclamation-circle"></i> {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.sex.label(class="form-label") }}
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-venus-mars"></i></span>
+                                    {{ form.sex(class="form-select") }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.bmi.label(class="form-label") }}
+                                <small class="text-muted d-block mb-2">Must be at least 20</small>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-weight"></i></span>
+                                    {{ form.bmi(class="form-control" + (" is-invalid" if form.bmi.errors else ""), 
+                                               placeholder="Enter BMI (minimum 20)",
+                                               min="20",
+                                               step="0.1",
+                                               type="number") }}
+                                </div>
+                                {% if form.bmi.errors %}
+                                    {% for error in form.bmi.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            <i class="fas fa-exclamation-circle"></i> {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.children.label(class="form-label") }}
+                                <small class="text-muted d-block mb-2">Must be between 0 and 5</small>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-child"></i></span>
+                                    {{ form.children(class="form-control" + (" is-invalid" if form.children.errors else ""), 
+                                                    placeholder="Enter number of children (0-5)",
+                                                    min="0",
+                                                    max="5",
+                                                    type="number") }}
+                                </div>
+                                {% if form.children.errors %}
+                                    {% for error in form.children.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            <i class="fas fa-exclamation-circle"></i> {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.smoker.label(class="form-label") }}
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-smoking"></i></span>
+                                    {{ form.smoker(class="form-select") }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.region.label(class="form-label") }}
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                    {{ form.region(class="form-select") }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        {{ form.submit(class="btn btn-primary btn-lg") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-chart-line"></i> Your Insurance Prediction Results</h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 class="card-title">Your Details</h5>
+                        <ul class="list-group list-group-flush mb-3">
+                            <li class="list-group-item">
+                                <i class="fas fa-user"></i> Age: {{ data.age }}
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fas fa-venus-mars"></i> Sex: {{ data.sex }}
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fas fa-weight"></i> BMI: {{ "%.2f"|format(data.bmi) }}
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fas fa-child"></i> Children: {{ data.children }}
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fas fa-smoking"></i> Smoker: {{ data.smoker }}
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fas fa-map-marker-alt"></i> Region: {{ data.region }}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="prediction-result text-center">
+                            <h4 class="alert-heading mb-3">Predicted Annual Insurance Cost</h4>
+                            <h2 class="display-4 mb-0">${{ "%.2f"|format(prediction) }}</h2>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('main.predict') }}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-redo"></i> Make Another Prediction
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %} 

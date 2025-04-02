@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-container">
+    <!-- User Stats Overview -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="feature-card">
+                <div class="d-flex align-items-center">
+                    <div class="feature-icon me-3">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1">Total Predictions</h6>
+                        <h3 class="mb-0">{{ total_predictions }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature-card">
+                <div class="d-flex align-items-center">
+                    <div class="feature-icon me-3">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1">Average Cost</h6>
+                        <h3 class="mb-0">${{ "%.2f"|format(avg_cost) }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature-card">
+                <div class="d-flex align-items-center">
+                    <div class="feature-icon me-3">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1">Latest Prediction</h6>
+                        <h3 class="mb-0">
+                            {% if latest_prediction %}
+                                ${{ "%.2f"|format(latest_prediction.charges) }}
+                            {% else %}
+                                No predictions yet
+                            {% endif %}
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prediction History -->
+    <div class="card">
+        <div class="card-header">
+            <h2><i class="fas fa-history"></i> Your Prediction History</h2>
+        </div>
+        <div class="card-body">
+            {% if predictions %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Age</th>
+                                <th>Sex</th>
+                                <th>BMI</th>
+                                <th>Children</th>
+                                <th>Smoker</th>
+                                <th>Region</th>
+                                <th>Predicted Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for prediction in predictions %}
+                            <tr class="prediction-row" data-bs-toggle="tooltip" title="Click for details">
+                                <td>{{ prediction.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>{{ prediction.age }}</td>
+                                <td>{{ prediction.sex }}</td>
+                                <td>{{ "%.1f"|format(prediction.bmi) }}</td>
+                                <td>{{ prediction.children }}</td>
+                                <td>
+                                    {% if prediction.smoker %}
+                                        <span class="badge bg-danger">Yes</span>
+                                    {% else %}
+                                        <span class="badge bg-success">No</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ prediction.region }}</td>
+                                <td>${{ "%.2f"|format(prediction.charges) }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-clipboard-list fa-3x mb-3 text-muted"></i>
+                    <h4>No predictions yet</h4>
+                    <p class="text-muted">Make your first prediction to see your history here.</p>
+                    <a href="{{ url_for('main.predict') }}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Make a Prediction
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Add some custom styles -->
+<style>
+    .dashboard-container {
+        padding: 20px 0;
+    }
+    
+    .prediction-row {
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    
+    .prediction-row:hover {
+        background-color: rgba(52, 152, 219, 0.1);
+    }
+    
+    .badge {
+        padding: 8px 12px;
+        border-radius: 20px;
+    }
+</style>
+
+<!-- Initialize tooltips -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+    });
+</script>
+{% endblock %} 

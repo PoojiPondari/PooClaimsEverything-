@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PooClaimsEverything! - Smart Insurance Predictor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-bg: #ecf0f1;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar {
+            background: linear-gradient(to right, #2c3e50, #3498db) !important;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #fff !important;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            padding: 0;
+        }
+        
+        .navbar-brand span {
+            margin-left: 8px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, #2c3e50, #3498db);
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .card-header {
+            background: linear-gradient(to right, #2c3e50, #3498db);
+            color: white;
+            padding: 15px;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #eee;
+            padding: 10px 15px;
+        }
+        
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+        
+        .prediction-result {
+            background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .hero-section {
+            background: url('https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover;
+            padding: 100px 0;
+            color: white;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toast-success {
+            background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .toast-error {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .toast-info {
+            background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 99999;
+            pointer-events: none;
+        }
+        
+        .card-hint {
+            font-size: 0.8rem;
+            color: var(--accent-color);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .feature-card:hover .card-hint {
+            opacity: 1;
+        }
+        
+        .modal-header.bg-gradient {
+            background: linear-gradient(to right, #2c3e50, #3498db);
+            color: white;
+        }
+        
+        .modal-body i {
+            color: var(--accent-color);
+        }
+        
+        .list-group-item i {
+            margin-right: 10px;
+        }
+        
+        .modal-dialog {
+            margin-top: 10vh;
+        }
+        
+        .brand-logo {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center top;
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            margin-right: 12px;
+            background-color: white;
+            padding: 2px;
+        }
+        
+        .navbar-brand:hover .brand-logo {
+            transform: rotate(5deg) scale(1.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            border-color: white;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" 
+                     alt="Shih Tzu Logo" 
+                     class="brand-logo">
+                <span>PooClaimsEverything!</span>
+            </a>
+            <div class="navbar-nav ms-auto">
+                {% if current_user.is_authenticated %}
+                    <a class="nav-item nav-link" href="{{ url_for('main.dashboard') }}">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                    <a class="nav-item nav-link" href="{{ url_for('main.predict') }}">
+                        <i class="fas fa-calculator"></i> Make Prediction
+                    </a>
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle"></i> Account
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" href="{{ url_for('main.login_history') }}">
+                                <i class="fas fa-history"></i> Login History
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ url_for('main.logout') }}">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                {% else %}
+                    <a class="nav-item nav-link" href="{{ url_for('main.login') }}">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                    <a class="nav-item nav-link" href="{{ url_for('main.register') }}">
+                        <i class="fas fa-user-plus"></i> Register
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    {% if request.endpoint == 'main.index' %}
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1 class="display-4 mb-4">Welcome to PooClaimsEverything!</h1>
+            <p class="lead">Your Smart Insurance Cost Predictor</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+        
+        {% if request.endpoint == 'main.index' %}
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="feature-card text-center" data-bs-toggle="modal" data-bs-target="#healthModal">
+                    <i class="fas fa-heartbeat feature-icon"></i>
+                    <h3>Health Focused</h3>
+                    <p>We consider your health factors to provide accurate predictions</p>
+                    <span class="card-hint">Click for more info</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card text-center" data-bs-toggle="modal" data-bs-target="#predictionsModal">
+                    <i class="fas fa-calculator feature-icon"></i>
+                    <h3>Smart Predictions</h3>
+                    <p>Advanced AI algorithms for precise insurance cost estimates</p>
+                    <span class="card-hint">Click for more info</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card text-center" data-bs-toggle="modal" data-bs-target="#securityModal">
+                    <i class="fas fa-shield-alt feature-icon"></i>
+                    <h3>Secure & Private</h3>
+                    <p>Your data is protected with state-of-the-art security</p>
+                    <span class="card-hint">Click for more info</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="healthModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-gradient">
+                        <h5 class="modal-title"><i class="fas fa-heartbeat"></i> Health Focused Predictions</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-4 text-center mb-3">
+                                <i class="fas fa-heartbeat fa-3x text-primary mb-3"></i>
+                                <h5>Health Factors</h5>
+                                <p>We analyze key health indicators like BMI, age, and smoking status</p>
+                            </div>
+                            <div class="col-md-4 text-center mb-3">
+                                <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
+                                <h5>Accurate Analysis</h5>
+                                <p>Our model considers multiple health factors for precise predictions</p>
+                            </div>
+                            <div class="col-md-4 text-center mb-3">
+                                <i class="fas fa-user-md fa-3x text-info mb-3"></i>
+                                <h5>Healthcare Insights</h5>
+                                <p>Get valuable insights about health factors affecting insurance costs</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <h5>How We Use Health Data:</h5>
+                        <ul class="list-group mt-3">
+                            <li class="list-group-item"><i class="fas fa-check text-success"></i> BMI Analysis for Risk Assessment</li>
+                            <li class="list-group-item"><i class="fas fa-check text-success"></i> Age-based Risk Evaluation</li>
+                            <li class="list-group-item"><i class="fas fa-check text-success"></i> Lifestyle Factor Consideration</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="predictionsModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-gradient">
+                        <h5 class="modal-title"><i class="fas fa-brain"></i> Smart AI Predictions</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-4 text-center mb-3">
+                                <i class="fas fa-robot fa-3x text-primary mb-3"></i>
+                                <h5>AI Powered</h5>
+                                <p>Using advanced machine learning algorithms</p>
+                            </div>
+                            <div class="col-md-4 text-center mb-3">
+                                <i class="fas fa-database fa-3x text-success mb-3"></i>
+                                <h5>Data Driven</h5>
+                                <p>Trained on extensive insurance claim data</p>
+                            </div>
+                            <div class="col-md-4 text-center mb-3">
+                                <i class="fas fa-chart-bar fa-3x text-info mb-3"></i>
+                                <h5>Real-time Updates</h5>
+                                <p>Model continuously learns from new data</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <h5>Our AI Features:</h5>
+                        <ul class="list-group mt-3">
+                            <li class="list-group-item"><i class="fas fa-check text-success"></i> Random Forest Algorithm</li>
+                            <li class="list-group-item"><i class="fas fa-check text-success"></i> Continuous Learning System</li>
+                            <li class="list-group-item"><i class="fas fa-check text-success"></i> Multi-factor Analysis</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="securityModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-gradient">
+                        <h5 class="modal-title"><i class="fas fa-shield-alt"></i> Security & Privacy</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-4 text-center mb-3">
+                                <i class="fas fa-lock fa-3x text-primary mb-3"></i>
+                                <h5>Secure Storage</h5>
+                                <p>Your data is encrypted and securely stored</p>
+                            </div>
+                            <div class="col-md-4 text-center mb-3">
+                                <i class="fas fa-user-shield fa-3x text-success mb-3"></i>
+                                <h5>Privacy First</h5>
+                                <p>We prioritize your data privacy</p>
+                            </div>
+                            <div class="col-md-4 text-center mb-3">
+                                <i class="fas fa-fingerprint fa-3x text-info mb-3"></i>
+                                <h5>Access Control</h5>
+                                <p>Strict authentication and authorization</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <h5>Security Measures:</h5>
+                        <ul class="list-group mt-3">
+                            <li class="list-group-item"><i class="fas fa-check text-success"></i> Encrypted Data Storage</li>
+                            <li class="list-group-item"><i class="fas fa-check text-success"></i> Secure User Authentication</li>
+                            <li class="list-group-item"><i class="fas fa-check text-success"></i> Regular Security Audits</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <footer class="bg-dark text-light text-center py-3 mt-5">
+        <p>© 2024 PooClaimsEverything! - Making Insurance Predictions Smart</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
+        function showToast(message, type = 'success') {
+            const gradients = {
+                success: "linear-gradient(135deg, #43cea2 0%, #185a9d 100%)",
+                error: "linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%)",
+                info: "linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%)"
+            };
+            
+            Toastify({
+                text: message,
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                style: {
+                    background: gradients[type],
+                    borderRadius: "15px",
+                    boxShadow: "0 5px 15px rgba(0,0,0,0.2)",
+                    fontSize: "16px",
+                    padding: "15px 25px"
+                },
+                onClick: function(){}
+            }).showToast();
+        }
+
+        function celebrateSuccess() {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
+
+        // Handle flash messages
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    showToast("{{ message }}", "{{ category }}");
+                    {% if category == 'success' %}
+                        celebrateSuccess();
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </script>
+</body>
+</html> 
