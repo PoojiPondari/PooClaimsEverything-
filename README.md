@@ -1,30 +1,34 @@
-PooClaimsEverything! – Insurance Cost Predictor
-PooClaimsEverything! is an intelligent web application built with Flask that leverages machine learning to predict insurance costs based on personal health factors. The app is designed to help users get accurate cost predictions with a focus on privacy and security.
+## **PooClaimsEverything! – Insurance Cost Predictor**
 
-Key Features:
-AI-powered Predictions: Instant insurance cost predictions using machine learning.
+**PooClaimsEverything!** is an intelligent web application built with Flask that leverages machine learning to predict insurance costs based on personal health factors. The app is designed to help users get accurate cost predictions with a focus on privacy and security.
 
-Personal Dashboard: View your prediction history and track changes over time.
+---
 
-Real-Time BMI Calculation: Automatically calculates and validates BMI for users.
+### **Key Features:**
+- **AI-powered Predictions:** Instant insurance cost predictions using machine learning.
 
-Secure Authentication: Protects your data with secure login and encrypted storage.
+- **Personal Dashboard:** View your prediction history and track changes over time.
 
-Mobile & Desktop Friendly: Fully responsive, ensuring ease of use across devices.
+- **Real-Time BMI Calculation:** Automatically calculates and validates BMI for users.
 
-Login History Tracking: Monitors and stores login attempts for better security.
+- **Secure Authentication:** Protects your data with secure login and encrypted storage.
 
-Quick Start:
-Clone the Repository
-Clone the project using Git and navigate to the project directory.
+- **Mobile & Desktop Friendly:** Fully responsive, ensuring ease of use across devices.
 
-Set Up Virtual Environment
-Create and activate a virtual environment:
+- **Login History Tracking:** Monitors and stores login attempts for better security.
 
-bash
-Copy
-python -m venv venv  
-source venv/bin/activate  # For Windows: venv\Scripts\activate
+---
+
+### **Quick Start:**
+
+1. **Clone the Repository**  
+   Clone the project using Git and navigate to the project directory.
+
+2. **Set Up Virtual Environment**  
+   Create and activate a virtual environment:
+   ```bash
+   python -m venv venv  
+   source venv/bin/activate  # For Windows: venv\Scripts\activate
 Install Dependencies
 Install the required libraries with:
 
@@ -90,3 +94,6 @@ Social Authentication: Allow users to log in via Google or GitHub.
 Export Data: Enable users to export their prediction history.
 
 Admin Dashboard: Develop an admin panel for managing users and monitoring activity.
+
+vbnet
+Copy
