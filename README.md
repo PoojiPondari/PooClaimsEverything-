@@ -1,107 +1,75 @@
-🧠 PooClaimsEverything! – Smarter Insurance Cost Predictions
-PooClaimsEverything is a simple and secure web app built with Flask that helps users predict their insurance costs based on personal health data. It uses machine learning to give fast, accurate estimates—no spreadsheets, no guessing!
+PooClaimsEverything! – Insurance Cost Predictor
 
-🔍 What Can It Do?
-Predicts insurance costs instantly using AI
+PooClaimsEverything is a Flask web app that predicts insurance costs based on personal health data. It uses machine learning to provide quick, accurate estimates.
 
-Provides a personal dashboard with history
+Key Features:
+Predicts insurance costs using AI
 
-Calculates your BMI in real-time
+Provides a personal dashboard with prediction history
 
-Tracks login history and secures your data
+Calculates BMI in real-time
 
-Works smoothly on mobile and desktop
+Secure user login and data protection
 
-🚀 How to Get Started
-Clone the repo
-git clone https://github.com/yourusername/insurance-claim-predictor.git
+Works on both mobile and desktop
 
-Create a virtual environment
-python -m venv venv
-Activate it: venv\Scripts\activate (Windows)
+How to Get Started:
+Clone the repository.
 
-Install dependencies
-pip install -r requirements.txt
+Set up a virtual environment and activate it.
 
-Start the app
+Install the required dependencies with pip install -r requirements.txt.
 
-bash
-Copy
-python setup_images.py  # (optional for setting up images)
-python run.py
-Visit in browser
-Open http://localhost:5000
+Start the application with python run.py.
 
-🧾 User Inputs
-Age: 1 to 70
+Open your browser and go to http://localhost:5000 to access the app.
 
-BMI: Must be at least 20
+User Inputs:
+Age: 1 to 70 years
+
+BMI: Minimum 20
 
 Children: 0 to 5
 
 Smoker: Yes / No
 
-Region: NE, NW, SE, SW
+Region: Northeast, Northwest, Southeast, Southwest
 
-🛡️ Built-in Security
-Encrypted passwords
+Security Features:
+Passwords are encrypted
 
-CSRF protection via Flask-WTF
+CSRF protection
 
-Session management with Flask-Login
+Login tracking (including time, IP, and status)
 
-Login tracking (time, IP, status)
+Tech Stack:
+Flask with Flask-Login and SQLAlchemy
 
-🧱 Tech Stack
-Flask + Flask-Login + SQLAlchemy
+Machine Learning using scikit-learn
 
-ML with scikit-learn
+Bootstrap for UI
 
-Bootstrap + Toastify for UI
-
-WTForms for validation
+WTForms for form validation
 
 SQLite or other SQL database
 
-🗃️ Database Overview
+Database Structure:
 User: username, email, password, claims
-Claims: age, BMI, smoker, region, predicted charges
-Login Logs: time, IP, user agent, success
 
-💡 Cool Features
-Age and BMI-based risk insights
+Claims: age, BMI, children, smoker, region, predicted charges
 
-Smoker impact factored in predictions
+Login Logs: time, IP, user agent, status
 
-Clean, responsive UI
+Future Features:
+Add more prediction factors
 
-Prediction logging for learning and analysis
+Implement API endpoints
 
-📌 Future Plans
-Add charts and graphs
+Add data visualization
 
-REST API support
+Enable social login options
 
-Social login (Google, GitHub)
-
-Export claim reports
+Export functionality
 
 Admin dashboard
 
-🧩 Project Layout
-arduino
-Copy
-app/
-│── static/images/
-│── templates/
-│   ├── login.html, dashboard.html, predict.html, etc.
-│── __init__.py
-│── routes.py
-│── models.py
-│── forms.py
-│── ml_model.py
-├── run.py
-├── requirements.txt
-├── setup_images.py
-
-MIT License.
